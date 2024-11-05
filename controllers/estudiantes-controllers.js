@@ -6,9 +6,9 @@ class EstudianteController {
 
     consultar ( req, res ) {
         try {
-            db.query(`SELECT * FROM estudiantes`, ( err, rows ) => {
-                if ( err ) res.status( 400 ).send( err );
-                res.status(200).json(rows);
+            db.query(`SELECT * FROM estudiantes`, ( err, data ) => {
+                if ( err ) return res.status( 400 ).send( err );
+                res.status(200).json(data);
             });
 
         } catch ( err ) {
@@ -21,9 +21,9 @@ class EstudianteController {
 
             const id = req.params.id;
 
-            db.query(`SELECT * FROM estudiantes WHERE id = ?`, [ id ], ( err, rows ) => {
-                if ( err ) res.status( 400 ).send( err );
-                res.status(200).json(rows[0]);
+            db.query(`SELECT * FROM estudiantes WHERE id = ?`, [ id ], ( err, data ) => {
+                if ( err ) return res.status( 400 ).send( err );
+                res.status(200).json(data[0]);
             });
 
         } catch ( err ) {
@@ -36,16 +36,16 @@ class EstudianteController {
 
             const { dni, nombre, apellido, email } = req.body;
 
-            db.query(`
-                INSERT INTO estudiantes
+            db.query(
+                `INSERT INTO estudiantes
                     ( id, dni, nombre, apellido, email )
-                VALUES ( NULL, ?,?,?,? );
-                `, [dni, nombre, apellido, email], ( err, rows ) => {
-                    if ( err ) {
-                        res.status( 400 ).send( err ); 
-                    };
-
-                    res.status(201).json( { id : rows.insertId })
+                VALUES ( NULL, ?,?,?,? );`,
+                
+                [dni, nombre, apellido, email],
+                
+                ( err, data ) => {
+                    if ( err ) return res.status( 400 ).send( err ); 
+                    res.status(201).json( { id : data.insertId })
                 });
 
         } catch (err) {
@@ -65,9 +65,9 @@ class EstudianteController {
                 SET dni = ?, nombre = ?, apellido = ?, email = ?
                 WHERE ID = ?;
                 `, [ dni, nombre, apellido, email, id ], 
-                ( err, rows ) => {
-                    if ( err ) res.status( 400 ).send( err );
-                    if ( rows.affectedRows == 1 ) res.status( 200 ).json({ respuesta : 'Registro actualizado con éxito'} );
+                ( err, data ) => {
+                    if ( err ) return res.status( 400 ).send( err );
+                    if ( data.affectedRows == 1 ) return res.status( 200 ).json({ respuesta : 'Registro actualizado con éxito'} );
                 })
 
         } catch ( err ) {
@@ -84,9 +84,9 @@ class EstudianteController {
                 DELETE FROM estudiantes
                 WHERE ID = ?;
                 `,[ id ], 
-                ( err, rows ) => {
-                    if ( err ) res.status( 400 ).send( err );
-                    if ( rows.affectedRows == 1 ) res.status( 200 ).json({ respuesta : 'Registro eliminado con éxito'});
+                ( err, data ) => {
+                    if ( err ) return res.status( 400 ).send( err );
+                    if ( data.affectedRows == 1 ) return res.status( 200 ).json({ respuesta : 'Registro eliminado con éxito'});
                 });
 
         } catch ( err ) {
