@@ -6,18 +6,14 @@ import profesoresRoutes from './routes/profesores-routes.js';
 import cursosRoutes from './routes/cursos-routes.js'
 
 const app = express();
-const PORT = 6500;
+const PORT = process.env.PORT;
 
 app.use( express.json() );
-app.use( cors() )
+app.use( cors() );
 
 app.use('/cursos', cursosRoutes );
 app.use( '/estudiantes', estudiantesRoutes );
 app.use( '/profesores', profesoresRoutes );
-
-
-
-
 
 
 app.listen( PORT, () => {

@@ -1,3 +1,5 @@
+-- script sql para practicar
+
 CREATE DATABASE nodejs_express_freeCodeCamp;
 
 USE nodejs_express_freeCodeCamp;
